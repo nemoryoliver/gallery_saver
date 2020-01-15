@@ -77,7 +77,15 @@ class GallerySaver {
     if (dir == null || dir.isEmpty) {
       dir = (await getTemporaryDirectory()).path;
     }
-    String savePath = '$dir/${basename(url)}';
+
+    var fileName = url;
+    var uri = Uri.parse(fileName);
+    fileName = fileName.replaceAll(uri.query, "");
+    if (fileName.endsWith("?")) {
+      fileName = fileName.substring(0, fileName.length - 1);
+    }
+
+    String savePath = '$dir/${basename(fileName)}';
     print(savePath);
 
     var dio = Dio();
