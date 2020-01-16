@@ -26,7 +26,7 @@ class GallerySaver {
     if (path == null || path.isEmpty) {
       throw ArgumentError(pleaseProvidePath);
     }
-    if (!isVideo(path)) {
+    if (!isVideo(path) || !await satisfyContentType(path, "video")) {
       throw ArgumentError(fileIsNotVideo);
     }
     if (!isLocalFilePath(path)) {
@@ -52,7 +52,7 @@ class GallerySaver {
     if (path == null || path.isEmpty) {
       throw ArgumentError(pleaseProvidePath);
     }
-    if (!isImage(path)) {
+    if (!isImage(path) || !await satisfyContentType(path, "image")) {
       throw ArgumentError(fileIsNotImage);
     }
     if (!isLocalFilePath(path)) {
@@ -85,6 +85,10 @@ class GallerySaver {
       fileName = fileName.substring(0, fileName.length - 1);
     }
 
+    if (!fileName.endsWith(".mp4")) {
+      fileName += ".mp4";
+    }
+
     String savePath = '$dir/${basename(fileName)}';
     print(savePath);
 
@@ -102,13 +106,22 @@ class GallerySaver {
           : progressCallback,
     );
 
-    // http.Client _client = new http.Client();
-    // var resp = await _client.get(Uri.parse(url));
-    // var bytes = resp.bodyBytes;
-
-    // File file = new File('$dir/${basename(url)}');
-    // await file.writeAsBytes(bytes);
-    // print('File size:${await file.length()}');
     return File(savePath);
+  }
+
+  static Future<bool> satisfyContentType(String url, String type) async {
+    var dio = Dio();
+    var resp = await dio.get(url);
+    var contentType = resp.headers.value("Content-Type");
+
+    if (type == "video") {
+      if (contentType.contains("video") || contentType.contains("audio")) {
+        return true;
+      }
+    } else if (type == "image") {
+      if (contentType.contains("image")) {
+        return true;
+      }
+    }
   }
 }
