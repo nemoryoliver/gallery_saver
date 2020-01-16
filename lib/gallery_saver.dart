@@ -26,11 +26,15 @@ class GallerySaver {
     if (path == null || path.isEmpty) {
       throw ArgumentError(pleaseProvidePath);
     }
-    if (!isVideo(path) || !await satisfyContentType(path, "video")) {
-      throw ArgumentError(fileIsNotVideo);
+    if (!isVideo(path)) {
+      var ok = await satisfyContentType(path, "video");
+      if (!ok) {
+        throw ArgumentError(fileIsNotVideo);
+      }
     }
     if (!isLocalFilePath(path)) {
-      tempFile = await _downloadFile(path, downloadPath, progressCallback);
+      tempFile =
+          await _downloadFile(path, "video", downloadPath, progressCallback);
       path = tempFile.path;
     }
     bool result = await _channel.invokeMethod(
@@ -52,11 +56,15 @@ class GallerySaver {
     if (path == null || path.isEmpty) {
       throw ArgumentError(pleaseProvidePath);
     }
-    if (!isImage(path) || !await satisfyContentType(path, "image")) {
-      throw ArgumentError(fileIsNotImage);
+    if (!isImage(path)) {
+      var ok = await satisfyContentType(path, "image");
+      if (!ok) {
+        throw ArgumentError(fileIsNotImage);
+      }
     }
     if (!isLocalFilePath(path)) {
-      tempFile = await _downloadFile(path, downloadPath, progressCallback);
+      tempFile =
+          await _downloadFile(path, "image", downloadPath, progressCallback);
       path = tempFile.path;
     }
 
@@ -72,7 +80,7 @@ class GallerySaver {
   }
 
   static Future<File> _downloadFile(
-      String url, String dir, progressCallback) async {
+      String url, String type, String dir, progressCallback) async {
     print(url);
     if (dir == null || dir.isEmpty) {
       dir = (await getTemporaryDirectory()).path;
@@ -85,8 +93,14 @@ class GallerySaver {
       fileName = fileName.substring(0, fileName.length - 1);
     }
 
-    if (!fileName.endsWith(".mp4")) {
-      fileName += ".mp4";
+    if (fileName.isEmpty) {
+      fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    }
+
+    if (type == "video") {
+      if (!fileName.endsWith(".mp4")) {
+        fileName += ".mp4";
+      }
     }
 
     String savePath = '$dir/${basename(fileName)}';
