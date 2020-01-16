@@ -94,6 +94,8 @@ class GallerySaver {
     }
 
     fileName = basename(fileName);
+    print("fileName:$fileName");
+
     if (type == "video") {
       if (!fileName.endsWith(".mp4")) {
         fileName += ".mp4";
@@ -101,15 +103,6 @@ class GallerySaver {
     }
 
     String savePath = '$dir/$fileName';
-    print(savePath);
-
-    if (type == "video") {
-      if (!fileName.endsWith(".mp4")) {
-        fileName += ".mp4";
-      }
-    }
-
-    String savePath = '$dir/${basename(fileName)}';
     print(savePath);
 
     var dio = Dio();
