@@ -93,9 +93,15 @@ class GallerySaver {
       fileName = fileName.substring(0, fileName.length - 1);
     }
 
-    if (fileName.isEmpty) {
-      fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    fileName = basename(fileName);
+    if (type == "video") {
+      if (!fileName.endsWith(".mp4")) {
+        fileName += ".mp4";
+      }
     }
+
+    String savePath = '$dir/$fileName';
+    print(savePath);
 
     if (type == "video") {
       if (!fileName.endsWith(".mp4")) {
