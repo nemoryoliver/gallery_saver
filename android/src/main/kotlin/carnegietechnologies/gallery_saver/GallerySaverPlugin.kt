@@ -14,6 +14,8 @@ class GallerySaverPlugin private constructor(
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(),
                     "gallery_saver")
+            if (registrar==null || registrar.activity()==null) { return; }
+            
             val gallerySaver = GallerySaver(registrar.activity())
             registrar.addRequestPermissionsResultListener(gallerySaver)
             val instance = GallerySaverPlugin(
