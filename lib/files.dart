@@ -16,6 +16,7 @@ const List<String> imageFormats = [
   '.tif',
   '.heic'
 ];
+
 const http = 'http';
 
 bool isLocalFilePath(String path) {

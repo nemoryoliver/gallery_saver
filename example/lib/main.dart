@@ -12,10 +12,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String firstButtonText = 'Take photo';
-  String secondButtonText = 'Record video';
+  String firstButtonText = 'Video';
+  String secondButtonText = 'Image';
   double textSize = 20;
-  String albumName ='Media';
+  String albumName = 'AlbumTest';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
                 child: SizedBox.expand(
                   child: RaisedButton(
                     color: Colors.blue,
-                    onPressed: _takePhoto,
+                    onPressed: _saveNetworkVideo,
                     child: Text(firstButtonText,
                         style:
                             TextStyle(fontSize: textSize, color: Colors.white)),
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                   child: SizedBox.expand(
                 child: RaisedButton(
                   color: Colors.white,
-                  onPressed: _recordVideo,
+                  onPressed: _saveNetworkImage,
                   child: Text(secondButtonText,
                       style: TextStyle(
                           fontSize: textSize, color: Colors.blueGrey)),

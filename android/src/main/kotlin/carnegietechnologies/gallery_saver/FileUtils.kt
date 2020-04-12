@@ -70,6 +70,8 @@ internal object FileUtils {
                 var outputStream: OutputStream? = null
                 if (imageUri != null) {
                     outputStream = contentResolver.openOutputStream(imageUri)
+                } else {
+                    return false;
                 }
 
                 outputStream?.use {
